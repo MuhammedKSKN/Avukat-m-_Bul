@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="Avukat, İlan, Hukuk, Uzmanlık" />
+  <meta name="description" content="Avukat ilanı oluşturma platformu." />
+  <meta name="author" content="Avukatımı Bul" />
+
+  <title>İlan Oluştur</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  <!-- Responsive style -->
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet" />
+</head>
+
+<body class="sub_page">
+  <div class="hero_area">
+    <!-- header section starts -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/terazi.png') }}" alt="" />
+            <span> Avukatımı Bul </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('index') }}">Anasayfa <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('hakkımızda') }}"> Hakkımızda</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('avukat') }}">Avukatımı Bul </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('yapayzeka') }}"> Dava Tahmini Yap </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('asistan') }}"> Avukat Tavsiyesi Al </a>
+              </li>
+              
+              <!-- İlan Ver bağlantısı -->
+              {% if session.get('sicil_no') %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('ilan') }}">İlan Ver</a>
+              </li>
+              {% endif %}
+    
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('sss') }}">SSS </a>
+              </li>
+            </ul>
+            <div class="user_option">
+              {% if session.get('username') %}  <!-- Oturum açılmışsa -->
+              <div class="dropdown">
+                <span class="username">{{ session['username'] }}</span>  <!-- Kullanıcı adını göster -->
+                <div class="dropdown-content">
+                  <a href="{{ url_for('logout') }}">Çıkış Yap</a>  <!-- Çıkış yap linki -->
+                </div>
+              </div>
+              {% else %}
+              <a href="{{ url_for('login') }}">
+                <span>Giriş Yap</span>  <!-- Giriş yapmamışsa Login yaz -->
+              </a>
+              {% endif %}
+              <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
+                <button class="btn my-2 my-sm-0 nav_search-btn" type="submit"></button>
+              </form>
+            </div>
+          </div>
+          <div>
+            <div class="custom_menu-btn">
+              <button>
+                <span class="s-1"></span>
+                <span class="s-2"></span>
+                <span class="s-3"></span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- header section ends -->
+  </div>
+
+  <!-- Form section -->
+  <section class="lawyer_form_section layout_padding-bottom">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-center mb-5">İlan Oluştur</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="card p-4">
+            <form action="/ilan" method="post">
+              <div class="form-group">
+                <label for="isimSoyisim">İsim Soyisim</label>
+                <input type="text" class="form-control" id="isimSoyisim" name="isimSoyisim" placeholder="İsim Soyisim" required>
+              </div>
+              <div class="form-group">
+                <label for="uzmanlik">Uzmanlık</label>
+                <input type="text" class="form-control" id="uzmanlik" name="uzmanlik" placeholder="Uzmanlık" required>
+              </div>
+              <div class="form-group">
+                <label for="email">E-posta</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="E-posta" required>
+              </div>
+              <div class="form-group">
+                <label for="telefon">Telefon Numarası</label>
+                <input type="tel" class="form-control" id="telefon" name="telefon" placeholder="Telefon Numarası" required>
+              </div>
+              <div class="form-group">
+                <label for="deneyim">Deneyim (Yıl)</label>
+                <input type="number" class="form-control" id="deneyim" name="deneyim" placeholder="Deneyim (Yıl)" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="konum">Büro Konumu (Şehir)</label>
+                <input type="text" class="form-control" id="konum" name="konum" placeholder="Şehir" required>
+              </div>
+              <div class="form-group">
+                <label for="aciklama">Açıklama (Maksimum 500 Kelime)</label>
+                <textarea class="form-control" id="aciklama" name="aciklama" rows="5" maxlength="500" placeholder="Kendi hakkınızda bilgi yazın..." required></textarea>
+                <small id="wordCount" class="form-text text-muted">Kalan Kelime: 500</small>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">İlan Oluştur</button>
+            </form>
+            <!-- Başka bir alana bağlı olarak mesajı göster -->
+            {% if mesaj %}
+            <div class="alert alert-success mt-3" role="alert">
+                {{ mesaj }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Form section ends -->
+
+  <!-- Info section -->
+  <section class="info_section">
+    <div class="info_container layout_padding-top">
+      <div class="container">
+        <div class="info_top">
+          <div class="info_logo">
+            <img
+              src="{{ url_for('static', filename='images/terazi.png') }}"
+              alt=""
+            />
+            <span class="shift-right-down"> Avukatımı Bul </span>
+          </div>
+          <div class="social_box">
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='images/fb.png') }}"
+                alt=""
+              />
+            </a>
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='images/twitter.png') }}"
+                alt=""
+              />
+            </a>
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='images/linkedin.png') }}"
+                alt=""
+              />
+            </a>
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='images/instagram.png') }}"
+                alt=""
+              />
+            </a>
+            <a href="#">
+              <img
+                src="{{ url_for('static', filename='images/youtube.png') }}"
+                alt=""
+              />
+            </a>
+          </div>
+        </div>
+
+        <div class="info_main">
+          <div class="row">
+            <div class="col-md-3 col-lg-2">
+              <div class="info_link-box">
+                <h5>Sayfalar</h5>
+                <ul>
+                  <li class="active">
+                    <a class="" href="{{ url_for('index') }}"
+                      >Ana Sayfa <span class="sr-only">(current)</span></a>
+                      <li class="">
+                        <a class="" href="{{ url_for('hakkımızda') }}">Hakkımızda </a>
+                      </li>
+                      <li class="">
+                        <a class="" href="{{ url_for('avukat') }}">Avukatımı Bul </a>
+                      </li>
+                      <li class="">
+                        <a class="" href="{{ url_for('yapayzeka') }}">Dava Tahmini Yap </a>
+                      </li>
+                      <li class="">
+                        <a class="" href="{{ url_for('asistan') }}">Avukat Tavsiyesi Al </a>
+                      </li>
+                      <li class="">
+                        <a class="" href="{{ url_for('sss') }}">SSS </a>
+                      </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <h5>MİSYON</h5>
+              <p>
+                Sürdürülebilir Kalkınma Hedefleri’nden “Barış, Adalet ve Güçlü
+                Kurumlar” ilkesine bağlı kalarak, herkesin hukuki süreçlerde
+                eşit ve adil bir şekilde temsil edilmesini sağlamak için
+                teknolojiyi kullanıyoruz. Yapay zeka desteğiyle, güvenilir
+                hukuki danışmanlığa kolay ve hızlı erişim sunarak topluma
+                hizmet ediyoruz.
+              </p>
+            </div>
+
+            <div class="col-md-3">
+              <h5>VİZYON</h5>
+              <p>
+                Adaletin herkes için erişilebilir olduğu bir dünya yaratmayı
+                hedefliyoruz. Teknolojiyi, bireylerin hukuki haklarını
+                savunabilmeleri için güçlü bir araç haline getirerek, toplumda
+                barış ve güçlü kurumlar inşa etmek amacıyla sektörde öncü
+                olmayı amaçlıyoruz.
+              </p>
+            </div>
+
+            <div class="col-md-3 offset-lg-1">
+              <div class="info_form">
+                <h5>BİZE ULAŞIN</h5>
+                <form action="">
+                  <input type="email" placeholder="Email" />
+                  <button>Gönder</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-9 col-md-10 mx-auto">
+            <div class="info_contact layout_padding2">
+              <div class="row">
+                <div class="col-md-3">
+                  <a href="#" class="link-box">
+                    <div class="img-box">
+                      <img
+                        src="{{ url_for('static', filename='images/location.png') }}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="detail-box">
+                      <h6>Konum</h6>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-md-4">
+                  <a href="#" class="link-box">
+                    <div class="img-box">
+                      <img
+                        src="{{ url_for('static', filename='images/mail.png') }}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="detail-box">
+                      <h6>avukatımıbul@gmail.com</h6>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-md-5">
+                  <a href="#" class="link-box">
+                    <div class="img-box">
+                      <img
+                        src="{{ url_for('static', filename='images/call.png') }}"
+                        alt=""
+                      />
+                    </div>
+                    <div class="detail-box">
+                      <h6>Call +90 1234567890</h6>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Info section ends -->
+
+  <!-- Footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <p>
+        © 2024 Tüm Hakları Saklıdır. Avukatımı Bul.
+      </p>
+    </div>
+  </footer>
+  <!-- Footer section ends -->
+
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const textarea = document.getElementById('aciklama');
+      const wordCount = document.getElementById('wordCount');
+
+      textarea.addEventListener('input', () => {
+        const words = textarea.value.split(/\s+/).filter(word => word.length > 0);
+        const remainingWords = 500 - words.length;
+        wordCount.textContent = `Kalan Kelime: ${Math.max(remainingWords, 0)}`;
+      });
+    });
+  </script>
+
+</body>
+
+</html>
